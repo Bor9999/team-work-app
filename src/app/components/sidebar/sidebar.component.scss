@@ -1,0 +1,16 @@
+.sidebar {
+    &__menu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+    }
+
+    &__item {
+        & a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+        }
+    }
+}

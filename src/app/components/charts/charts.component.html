@@ -1,0 +1,6 @@
+<section class="charts">
+    <div class="charts__row">
+        <app-chart *ngFor="let chart of fullArray; let i = index" [id]="'chart' + i" [chartData]="fullArray[i]">
+        </app-chart>
+    </div>
+</section>

@@ -1,7 +1,7 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
-import { IData, IDataFull } from '../types/types';
+import { Observable } from 'rxjs';
+import { GeneralData, DetailDataSlice } from 'src/app/types/types';
 
 @Injectable({
   providedIn: 'root',
@@ -9,25 +9,30 @@ import { IData, IDataFull } from '../types/types';
 export class DataService {
   constructor(private http: HttpClient) {}
 
-  getFirstArray(): Observable<any> {
-    const data0 = this.http.get('http://193.33.194.100:8080/general');
-    return data0;
+  getFirstArray(): Observable<Array<GeneralData>> {
+    return this.http.get<Array<GeneralData>>(
+      'http://193.33.194.100:8080/general'
+    );
   }
   getSecondArray(
     id: number | string,
-    date_start = null,
-    date_end = null
-  ): Observable<any> {
+    date_start = '',
+    date_end = ''
+  ): Observable<Array<DetailDataSlice>> {
     if (date_start && date_end) {
-      const data0 = this.http.get('http://193.33.194.100:8080/detail', {
-        params: { id: id, date_start: date_start, date_end: date_end },
-      });
-      return data0;
+      return this.http.get<Array<DetailDataSlice>>(
+        'http://193.33.194.100:8080/detail',
+        {
+          params: { id: id, date_start: date_start, date_end: date_end },
+        }
+      );
     } else {
-      const data0 = this.http.get('http://193.33.194.100:8080/detail', {
-        params: { id: id },
-      });
-      return data0;
+      return this.http.get<Array<DetailDataSlice>>(
+        'http://193.33.194.100:8080/detail',
+        {
+          params: { id: id },
+        }
+      );
     }
   }
 }

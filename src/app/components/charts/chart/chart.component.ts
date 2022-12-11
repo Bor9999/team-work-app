@@ -9,6 +9,7 @@ import {
 import { Router, RouterState } from '@angular/router';
 import { Chart, ChartItem, registerables, _adapters } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { DetailDataSlice } from 'src/app/types/types';
 Chart.register(...registerables);
 
 @Component({
@@ -23,9 +24,9 @@ export class ChartComponent {
   isFullscreen = false;
 
   //Получаем id графика
-  @Input() id: any;
+  @Input() id!: string;
 
-  @Input() chartData: any;
+  @Input() chartData!: Array<DetailDataSlice>;
 
   //В случае нажатия ESC будет сбрасываться fullscreen
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(

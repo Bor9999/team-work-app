@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { concatMap, Subscription, tap } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -18,29 +18,29 @@ export class DetailedChartComponent implements OnInit {
   stateId = history.state.id;
   subscribtionData!: Subscription;
   id = 'detailedID';
+  paramId: string = '';
+  paramStart: string = '';
+  paramEnd: string = '';
 
   ngOnInit(): void {
     console.log(this.chartData);
     if (!this.chartData) {
-      // console.log('adaadad');
-      this.subscribtionData = this.activatedRoute.queryParams.subscribe(
-        (params) => {
-          this.loader
-            .getSecondArray(
+      this.subscribtionData = this.activatedRoute.queryParams
+        .pipe(
+          concatMap((params) => {
+            this.paramId = params['id'];
+            return this.loader.getSecondArray(
               params['id'],
               params['date_start'],
               params['date_end']
-            )
-            .subscribe((data) => {
-              this.chartData = data;
-              this.chartData = [params['id'], this.chartData];
-              // console.log(this.chartData);
-            });
-        }
-      );
+            );
+          })
+        )
+        .subscribe((data) => {
+          this.chartData = [this.paramId, data];
+        });
     } else {
       this.chartData = [this.stateId, this.chartData];
-      // console.log(this.chartData);
     }
   }
   ngOnDestroy() {
